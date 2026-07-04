@@ -99,7 +99,9 @@
   .card.passed .name{font-weight:600;}
   .req-note{font-size:10px;line-height:1.35;color:var(--red);margin-top:-2px;margin-bottom:5px;}
   .moved-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--violet);color:#fff;
-    padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:5px;}
+    padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:5px;margin-right:4px;}
+  .odd-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--orange);color:var(--blue-deep);
+    padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:5px;font-weight:600;}
   .foot{display:flex;justify-content:space-between;align-items:center;margin-top:2px;}
   .mv{font-family:'IBM Plex Mono',monospace;font-size:12px;background:none;border:1px solid var(--ink-soft);
     color:var(--ink);width:20px;height:20px;line-height:1;border-radius:3px;cursor:pointer;opacity:0.55;}
@@ -162,7 +164,7 @@
 const RAW = [
   // sem1
   {id:'IIC1103', name:'Introducción a la Programación', cr:10, sem:1, reqs:[]},
-  {id:'IIC1001', name:'Algoritmos y Sistemas Computacionales', cr:5, sem:1, reqs:[]},
+  {id:'IIC1001', name:'Algoritmos y Sistemas Computacionales', cr:5, sem:1, reqs:[], oddOnly:true},
   {id:'MAT1107', name:'Introducción al Cálculo', cr:10, sem:1, reqs:[]},
   {id:'MAT1207', name:'Introducción al Álgebra y Geometría', cr:10, sem:1, reqs:[]},
   {id:'FIL2001', name:'Filosofía: ¿Para qué?', cr:10, sem:1, reqs:[]},
@@ -187,7 +189,7 @@ const RAW = [
   {id:'IIC2343', name:'Arquitectura de Computadores', cr:10, sem:4, reqs:[{options:['IIC2233'],coreq:true}]},
   {id:'FG4', name:'Formación General', cr:10, sem:4, reqs:[], blank:true},
   // sem5
-  {id:'IIC2560', name:'Fundamentos de Lenguajes de Programación', cr:10, sem:5, reqs:[{options:['IIC2224']},{options:['IIC2343']}]},
+  {id:'IIC2560', name:'Fundamentos de Lenguajes de Programación', cr:10, sem:5, reqs:[{options:['IIC2224']},{options:['IIC2343']}], oddOnly:true},
   {id:'IIC2214', name:'Teoría de la Computación', cr:10, sem:5, reqs:[{options:['IIC1253']}]},
   {id:'IIC2513', name:'Tecnologías y Aplicaciones Web', cr:10, sem:5, reqs:[{options:['IIC2143']}]},
   {id:'IIC2333', name:'Sistemas Operativos y Redes', cr:10, sem:5, reqs:[{options:['IIC2343']}]},
@@ -244,17 +246,29 @@ function missingReqNames(course){
   });
   return missing;
 }
+// dir: +1 pushes forward to next valid semester, -1 pulls back to previous valid semester
+function adjustForOddOnly(course, sem, dir){
+  if(course.oddOnly && sem % 2 === 0){
+    sem += dir;
+  }
+  return sem;
+}
+function canMoveToSemester(course, targetSem){
+  if(targetSem < 1) return false;
+  return course.reqs.every(g=> g.options.some(o=> g.coreq ? pos[o]<=targetSem : pos[o]<targetSem));
+}
 function canMoveLeft(id){
   const c = byId[id];
-  const newSem = pos[id]-1;
-  if(newSem<1) return false;
-  return c.reqs.every(g=> g.options.some(o=> g.coreq ? pos[o]<=newSem : pos[o]<newSem ));
+  let newSem = adjustForOddOnly(c, pos[id]-1, -1);
+  return canMoveToSemester(c, newSem);
 }
 function moveCourse(id, newSem, affected){
+  newSem = adjustForOddOnly(byId[id], newSem, 1);
   pos[id]=newSem;
   affected.add(id);
   (dependents[id]||[]).forEach(({dep,group})=>{
-    const minSem = group.coreq ? newSem : newSem+1;
+    let minSem = group.coreq ? newSem : newSem+1;
+    minSem = adjustForOddOnly(byId[dep], minSem, 1);
     if(pos[dep] < minSem){
       moveCourse(dep, minSem, affected);
     }
@@ -304,7 +318,8 @@ function render(justAffected){
       card.dataset.id = c.id;
 
       const movedBadge = (!c.blank && pos[c.id] !== c.sem)
-        ? `<div class="moved-badge">movido de S${c.sem}</div>` : '';
+        ? `<span class="moved-badge">movido de S${c.sem}</span>` : '';
+      const oddBadge = c.oddOnly ? `<span class="odd-badge">solo impares</span>` : '';
 
       let reqNote = '';
       if(locked){
@@ -319,7 +334,7 @@ function render(justAffected){
 
       card.innerHTML = `
         <div class="card-top"><span>${c.id.startsWith('OPT')||c.id.startsWith('FG')||c.id.startsWith('FORM')||c.id.startsWith('VRA') ? '' : c.id}</span><span>${c.cr>0? c.cr+' cr':''}</span></div>
-        ${movedBadge}
+        ${movedBadge}${oddBadge}
         <div class="name">${c.name}</div>
         ${reqNote}
         <div class="foot">
@@ -351,15 +366,20 @@ board.addEventListener('click', (e)=>{
       render(affected);
       if(affected.size>1){
         toast(`Atrasaste ${c.name}. Esto también empujó ${affected.size-1} ramo(s) que dependen de él.`);
+      } else if(c.oddOnly){
+        toast(`${c.name} solo se dicta en semestres impares, se ubicó en el Semestre ${pos[id]}.`);
       }
     } else {
       if(canMoveLeft(id)){
-        pos[id] = pos[id]-1;
+        pos[id] = adjustForOddOnly(c, pos[id]-1, -1);
         render(new Set([id]));
+        if(c.oddOnly){ toast(`${c.name} solo se dicta en semestres impares, se ubicó en el Semestre ${pos[id]}.`); }
       } else {
         const card = e.target.closest('.card');
         card.classList.add('flash');
-        toast(`No puedes adelantar "${c.name}" más allá de sus prerrequisitos.`);
+        toast(c.oddOnly
+          ? `No puedes adelantar "${c.name}" más — solo se dicta en semestres impares y/o ya llegó a su prerrequisito mínimo.`
+          : `No puedes adelantar "${c.name}" más allá de sus prerrequisitos.`);
         setTimeout(()=>card.classList.remove('flash'),500);
       }
     }
