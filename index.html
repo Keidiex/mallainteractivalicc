@@ -121,9 +121,103 @@
     transition:opacity .25s ease;z-index:50;}
   .toast.show{opacity:1;}
 
+  /* ---- elective slots ---- */
+  .card.elective-empty{border:1.5px dashed var(--orange);background:transparent;}
+  .card.elective-empty .name{color:#f0c98a;}
+  .card.elective-chosen{border-color:var(--line-strong);}
+  .elective-action{font-size:10.5px;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);
+    text-decoration:underline;text-decoration-style:dashed;cursor:pointer;display:inline-block;margin:-2px 0 6px;}
+  .card.passed .elective-action{color:rgba(255,255,255,0.85);}
+  .card.elective-empty .elective-action{color:var(--orange);text-decoration:none;font-weight:600;}
+
+  /* ---- picker modal ---- */
+  .picker-overlay{position:fixed;inset:0;background:rgba(6,14,26,0.72);backdrop-filter:blur(2px);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .picker-overlay.show{display:flex;}
+  .picker-modal{position:relative;background:var(--blue-panel);border:1px solid var(--line-strong);
+    border-radius:8px;max-width:640px;width:100%;max-height:82vh;display:flex;flex-direction:column;
+    overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .picker-hdr{padding:16px 44px 12px 18px;border-bottom:2px dashed var(--muted-line);}
+  .picker-hdr h3{margin:0 0 4px;font-family:'Space Grotesk',sans-serif;font-size:16px;}
+  .picker-hdr p{margin:0;font-size:12px;color:#a9c1d9;}
+  .picker-totals{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .picker-totals span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--blue-panel-2);
+    border:1px solid var(--line-strong);padding:3px 9px;border-radius:8px;}
+  .picker-totals span.ok{border-color:var(--green);color:var(--green);}
+  .picker-totals span.warn{border-color:var(--orange);color:var(--orange);}
+  .picker-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--paper);
+    font-size:22px;cursor:pointer;line-height:1;}
+  .picker-search{padding:10px 18px;border-bottom:1px solid var(--line-strong);}
+  .picker-search input{width:100%;background:var(--blue-deep);border:1px solid var(--line-strong);
+    color:var(--paper);padding:8px 10px;border-radius:4px;font-family:'IBM Plex Sans',sans-serif;font-size:13px;}
+  .picker-body{overflow-y:auto;padding:6px 12px 16px;flex:1;}
+  .picker-clear{margin:10px 6px 2px;text-align:right;}
+  .picker-clear button{background:none;border:1px solid var(--red);color:var(--red);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 10px;border-radius:4px;cursor:pointer;}
+  .picker-group-label{font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--orange);
+    text-transform:uppercase;letter-spacing:0.4px;margin:14px 6px 6px;}
+  .picker-item{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--paper);
+    color:var(--ink);padding:8px 12px;border-radius:4px;margin-bottom:6px;cursor:pointer;
+    border:2px solid transparent;font-size:12.5px;}
+  .picker-item:hover{border-color:var(--orange);}
+  .picker-item.selected{border-color:var(--green);background:rgba(63,166,108,0.18);}
+  .picker-item.disabled{opacity:0.42;cursor:not-allowed;}
+  .picker-item .pi-left{display:flex;gap:8px;align-items:baseline;min-width:0;}
+  .picker-item .pi-code{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;}
+  .picker-item .pi-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .picker-item .pi-right{display:flex;gap:6px;align-items:center;flex:0 0 auto;}
+  .picker-item .pi-cr{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);white-space:nowrap;}
+  .picker-item .pi-flag{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--red);white-space:nowrap;}
+  .picker-empty-msg{padding:20px;text-align:center;color:#a9c1d9;font-size:12.5px;}
+
   ::-webkit-scrollbar{height:9px;}
   ::-webkit-scrollbar-track{background:var(--blue-panel);}
   ::-webkit-scrollbar-thumb{background:var(--muted-line);border-radius:5px;}
+
+  /* ---- reference / info section ---- */
+  .info-wrap{margin-top:44px;border-top:2px dashed var(--muted-line);padding-top:30px;}
+  .info-wrap h2{font-family:'Space Grotesk',sans-serif;font-size:19px;margin:0 0 6px;
+    display:flex;align-items:center;gap:10px;}
+  .info-wrap h2 .idx{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--orange);
+    color:var(--blue-deep);padding:2px 8px;border-radius:3px;font-weight:600;}
+  .info-wrap > section{margin-bottom:38px;}
+  .info-wrap .lead{color:#a9c1d9;font-size:13px;margin:0 0 16px;max-width:640px;line-height:1.55;}
+
+  .note-list{list-style:none;margin:0;padding:0;display:grid;gap:9px;max-width:820px;}
+  .note-list li{background:var(--blue-panel);border:1px solid var(--line-strong);border-radius:5px;
+    padding:10px 14px 10px 32px;font-size:13px;line-height:1.5;color:#d7e3ee;position:relative;}
+  .note-list li:before{content:"▸";position:absolute;left:12px;top:10px;color:var(--orange);font-weight:700;}
+  .note-list b{color:#fff;}
+
+  .opt-block{margin-bottom:22px;}
+  .opt-block h3{font-family:'Space Grotesk',sans-serif;font-size:14px;margin:0 0 10px;color:var(--orange);
+    display:flex;align-items:center;gap:8px;}
+  .opt-block h3 .cr-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;background:var(--blue-panel-2);
+    color:#c7d7e8;border:1px solid var(--line-strong);padding:2px 7px;border-radius:8px;font-weight:400;}
+
+  .opt-table{width:100%;border-collapse:collapse;background:var(--paper);color:var(--ink);
+    border-radius:4px;overflow:hidden;font-size:12.5px;}
+  .opt-table th{background:var(--blue-panel-2);color:var(--paper);text-align:left;padding:7px 10px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.3px;font-weight:600;}
+  .opt-table td{padding:6px 10px;border-top:1px solid rgba(13,36,64,0.09);}
+  .opt-table tr:hover td{background:rgba(232,135,30,0.08);}
+  .opt-table td.code{font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap;font-size:11.5px;}
+  .opt-table td.cr{text-align:right;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);white-space:nowrap;}
+
+  .area-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  details.area{background:var(--blue-panel);border:1px solid var(--line-strong);border-radius:5px;
+    overflow:hidden;align-self:start;}
+  details.area summary{cursor:pointer;padding:10px 14px;font-family:'Space Grotesk',sans-serif;font-size:13px;
+    font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;
+    color:var(--paper);}
+  details.area summary::-webkit-details-marker{display:none;}
+  details.area summary:after{content:"+";font-family:'IBM Plex Mono',monospace;color:var(--orange);
+    font-size:15px;flex:0 0 auto;}
+  details.area[open] summary:after{content:"–";}
+  details.area .opt-table{border-top:1px solid var(--line-strong);border-radius:0;}
+  details.area summary .cnt{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#a9c1d9;font-weight:400;}
+
+  .sci-note{font-size:12px;color:#a9c1d9;margin:10px 0 0;max-width:640px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -154,9 +248,188 @@
   </div>
 
   <div class="board" id="board"></div>
+
+  <div class="info-wrap">
+
+    <section>
+      <h2><span class="idx">i</span>Cómo usar esta herramienta</h2>
+      <ul class="note-list">
+        <li>Esta es una <b>herramienta de planificación personal</b>, no reemplaza la validación oficial de la escuela (SIDING u otro sistema). Antes de inscribir, confirma siempre con el sistema oficial.</li>
+        <li>Los prerrequisitos y correquisitos están basados en la malla vigente de la cadena de ramos. Si la escuela actualiza la malla, no dudes en avisar para ponerla al dia :p.</li>
+        <li>Que un ramo aparezca "disponible" según los prerrequisitos <b>no garantiza que se dicte ese semestre</b> — varios ramos tienen oferta limitada (un semestre al año, cupos, profesor a cargo, etc).</li>
+        <li>Los ramos con etiqueta <b>"solo impares"</b> o <b>"solo pares"</b> reflejan periodicidad real de dictado (ej: Teoría de la Computación y Fundamentos de Lenguajes de Programación solo en semestres impares; el Proyecto de Innovación y Computación solo en pares).</li>
+        <li>Marcar un ramo como <b>aprobado</b> es solo para que la herramienta calcule qué se desbloquea — no queda guardado entre sesiones ni se sincroniza con nada oficial.</li>
+        <li>Los créditos de <b>Optativo de Ciencias</b>, <b>OPT o Minor</b> y <b>Formación General</b> aparecen en la malla como bloques genéricos. Más abajo tienes el detalle real de qué cursos cuentan para cada categoría.</li>
+        <li>Usa <b>↺ reiniciar plan</b> para volver todo a la malla oficial y borrar los ramos marcados como aprobados.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="idx">1</span>Optativos de Computación (OPT o Minor) — 50 cr en total</h2>
+      <p class="lead">Los 50 créditos de OPT/Minor de la malla se completan combinando estos dos bloques.</p>
+
+      <div class="opt-block">
+        <h3>Bloque A · máximo 20 cr <span class="cr-tag">disciplina de computación</span></h3>
+        <table class="opt-table">
+          <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+          <tr><td class="code">IIC2026</td><td>Visualización de Información</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2714</td><td>Fundamentos de Procesamiento de Imágenes</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2113</td><td>Diseño Detallado de Software</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2173</td><td>Arquitectura de Sistemas de Software</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2764</td><td>Conocimiento, Cultura y Tecnología</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2293</td><td>Algoritmos Avanzados</td><td class="cr">10</td></tr>
+          <tr><td class="code">IIC2433</td><td>Minería de Datos</td><td class="cr">10</td></tr>
+        </table>
+      </div>
+
+      <div class="opt-block">
+        <h3>Bloque B · mínimo 30 cr <span class="cr-tag">por área, a elección</span></h3>
+        <div class="area-grid">
+
+          <details class="area" open><summary>Periodismo, comunicación y datos</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">COM117</td><td>Narración Interactiva</td><td class="cr">10</td></tr>
+              <tr><td class="code">COM121</td><td>Semiología</td><td class="cr">10</td></tr>
+              <tr><td class="code">COM155</td><td>Laboratorio de Escucha</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Nuevas Tecnologías de Comunicación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">COM813</td><td>Taller de Narración e Industria de E-Sports o Deportes Electrónicos</td><td class="cr">10</td></tr>
+              <tr><td class="code">COM605</td><td>Taller de Animación</td><td class="cr">10</td></tr>
+              <tr><td class="code">COM617</td><td>Lenguaje del Video Juego</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Matemáticas y Computación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">IMT2117</td><td>Probabilidades y Algoritmos</td><td class="cr">10</td></tr>
+              <tr><td class="code">IMT2120</td><td>Data Warehousing Transaccional y la Nube</td><td class="cr">10</td></tr>
+              <tr><td class="code">MAT2225</td><td>Teoría de Números</td><td class="cr">10</td></tr>
+              <tr><td class="code">MAT2605</td><td>Cálculo Científico I</td><td class="cr">10</td></tr>
+              <tr><td class="code">MAT2205</td><td>Álgebra Abstracta I</td><td class="cr">10</td></tr>
+              <tr><td class="code">MAT251I</td><td>Análisis Real</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Lingüística y Computación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">LET0121</td><td>Grandes Preguntas sobre el Lenguaje</td><td class="cr">10</td></tr>
+              <tr><td class="code">LET0131</td><td>Gramática Española I</td><td class="cr">10</td></tr>
+              <tr><td class="code">LET0129</td><td>Lingüística de Corpus y Computacional</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Economía y Computación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">EAE1210</td><td>Introducción a la Macroeconomía</td><td class="cr">10</td></tr>
+              <tr><td class="code">EAE1110</td><td>Introducción a la Microeconomía</td><td class="cr">10</td></tr>
+              <tr><td class="code">EAE2510</td><td>Econometría</td><td class="cr">10</td></tr>
+              <tr><td class="code">EAE1220</td><td>Análisis Económico: la Experiencia Chilena</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Astronomía y Computación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">AST211</td><td>Introducción al Análisis de Datos</td><td class="cr">10</td></tr>
+              <tr><td class="code">AST221</td><td>Taller de Astronomía</td><td class="cr">10</td></tr>
+              <tr><td class="code">AST101</td><td>Un Paseo por el Universo</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Biología y Computación</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">BIO242C</td><td>Bioestadística</td><td class="cr">10</td></tr>
+              <tr><td class="code">BIO231C</td><td>Ecología</td><td class="cr">10</td></tr>
+              <tr><td class="code">BIO298E</td><td>Trabajo Experimental en Ecología</td><td class="cr">5</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Ingeniería de Software</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">IIC2113</td><td>Diseño Detallado de Software</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC2173</td><td>Arquitectura de Sistemas de Software</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3103</td><td>Taller de Integración</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3745</td><td>Testing</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3380</td><td>Taller de Aplicaciones en Plataformas Móviles</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3585</td><td>Diseño Avanzado de Aplicaciones Web</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Inteligencia Artificial</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">IIC2433</td><td>Minería de Datos</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC2440</td><td>Procesamiento de Datos Masivos</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC2685</td><td>Robótica Móvil</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3670</td><td>Procesamiento de Lenguaje Natural</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3675</td><td>Aprendizaje Reforzado</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3694</td><td>Inteligencia Artificial Generativa</td><td class="cr">10</td></tr>
+              <tr><td class="code">IIC3697</td><td>Aprendizaje Profundo</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+          <details class="area" open><summary>Diseño</summary>
+            <table class="opt-table">
+              <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+              <tr><td class="code">DNO016</td><td>Diseño y Manufactura Digital Cad/Cam</td><td class="cr">10</td></tr>
+              <tr><td class="code">DNO036</td><td>Design Sketching</td><td class="cr">10</td></tr>
+              <tr><td class="code">DNO151P</td><td>Diseño por Computación I</td><td class="cr">10</td></tr>
+              <tr><td class="code">DNO096</td><td>Introducción al Desarrollo Web desde el Diseño</td><td class="cr">10</td></tr>
+            </table>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="idx">2</span>Optativos de Ciencias — mínimo 10 cr</h2>
+      <p class="lead">Los estudiantes de LICC deben cursar al menos 10 cr de curso Optativo de Ciencias, escogiendo entre las siguientes opciones.</p>
+      <table class="opt-table" style="max-width:640px;">
+        <tr><th>Curso</th><th>Nombre</th><th>Cr</th></tr>
+        <tr><td class="code">FIS1514 + FIS0154</td><td>Dinámica + Laboratorio de Dinámica <span style="opacity:.6">(o ICE1514+FIS0154)</span></td><td class="cr">10+0</td></tr>
+        <tr><td class="code">FIS1523 + FIS0152</td><td>Termodinámica + Laboratorio de Termodinámica</td><td class="cr">10+0</td></tr>
+        <tr><td class="code">FIS1533 + FIS0153</td><td>Electricidad y Magnetismo + Laboratorio de Electricidad y Magnetismo</td><td class="cr">10+0</td></tr>
+        <tr><td class="code">AST101</td><td>Un Paseo por el Universo</td><td class="cr">10</td></tr>
+        <tr><td class="code">AST211</td><td>Introducción al Análisis de Datos</td><td class="cr">10</td></tr>
+        <tr><td class="code">AST221</td><td>Taller de Astronomía</td><td class="cr">10</td></tr>
+        <tr><td class="code">AST0112</td><td>Astronomy</td><td class="cr">10</td></tr>
+        <tr><td class="code">BIO110C</td><td>Biología de Organismos y Comunidades</td><td class="cr">10</td></tr>
+        <tr><td class="code">BIO141C</td><td>Biología de la Célula</td><td class="cr">10</td></tr>
+        <tr><td class="code">BIO242C</td><td>Bioestadística</td><td class="cr">10</td></tr>
+        <tr><td class="code">BIO231C</td><td>Ecología</td><td class="cr">10</td></tr>
+        <tr><td class="code">QIM100E</td><td>Química para Ingeniería</td><td class="cr">10</td></tr>
+        <tr><td class="code">QIM100</td><td>Química General</td><td class="cr">10</td></tr>
+        <tr><td class="code">AGL101</td><td>Botánica</td><td class="cr">10</td></tr>
+        <tr><td class="code">AGC220</td><td>Flora Natura</td><td class="cr">10</td></tr>
+        <tr><td class="code">VET0140</td><td>Biología y Diversidad Animal</td><td class="cr">10</td></tr>
+      </table>
+      <p class="sci-note">Las combinaciones de ramo + laboratorio cuentan como una sola elección de 10 cr (el laboratorio va con 0 cr).</p>
+    </section>
+
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="picker-overlay" id="pickerOverlay">
+  <div class="picker-modal">
+    <button class="picker-close" id="pickerClose">×</button>
+    <div class="picker-hdr" id="pickerHdr"></div>
+    <div class="picker-search"><input type="text" id="pickerSearch" placeholder="buscar por nombre o código…"></div>
+    <div class="picker-body" id="pickerBody"></div>
+  </div>
+</div>
 
 <script>
 /* ---------- DATA ---------- */
@@ -164,7 +437,7 @@
 const RAW = [
   // sem1
   {id:'IIC1103', name:'Introducción a la Programación', cr:10, sem:1, reqs:[]},
-  {id:'IIC1001', name:'Algoritmos y Sistemas Computacionales', cr:5, sem:1, reqs:[], oddOnly:true},
+  {id:'IIC1001', name:'Algoritmos y Sistemas Computacionales', cr:5, sem:1, reqs:[], parity:'odd'},
   {id:'MAT1107', name:'Introducción al Cálculo', cr:10, sem:1, reqs:[]},
   {id:'MAT1207', name:'Introducción al Álgebra y Geometría', cr:10, sem:1, reqs:[]},
   {id:'FIL2001', name:'Filosofía: ¿Para qué?', cr:10, sem:1, reqs:[]},
@@ -172,7 +445,7 @@ const RAW = [
   // sem2
   {id:'IIC1253', name:'Matemáticas Discretas', cr:10, sem:2, reqs:[{options:['IIC1001']},{options:['MAT1207']}]},
   {id:'IIC2233', name:'Programación Avanzada', cr:10, sem:2, reqs:[{options:['IIC1103']}]},
-  {id:'OPT_CS', name:'Optativo de Ciencias', cr:10, sem:2, reqs:[], blank:true},
+  {id:'OPT_CS', name:'Optativo de Ciencias', cr:10, sem:2, reqs:[], blank:true, elective:'ciencias'},
   {id:'MAT1610', name:'Cálculo I', cr:10, sem:2, reqs:[{options:['MAT1107']}]},
   {id:'FORM_TEO', name:'Formación Teológica', cr:10, sem:2, reqs:[], blank:true},
   {id:'VRA3010', name:'English Test Alte 3', cr:0, sem:2, reqs:[], blank:true},
@@ -189,8 +462,8 @@ const RAW = [
   {id:'IIC2343', name:'Arquitectura de Computadores', cr:10, sem:4, reqs:[{options:['IIC2233'],coreq:true}]},
   {id:'FG4', name:'Formación General', cr:10, sem:4, reqs:[], blank:true},
   // sem5
-  {id:'IIC2560', name:'Fundamentos de Lenguajes de Programación', cr:10, sem:5, reqs:[{options:['IIC2224']},{options:['IIC2343']}], oddOnly:true},
-  {id:'IIC2214', name:'Teoría de la Computación', cr:10, sem:5, reqs:[{options:['IIC1253']}]},
+  {id:'IIC2560', name:'Fundamentos de Lenguajes de Programación', cr:10, sem:5, reqs:[{options:['IIC2224']},{options:['IIC2343']}], parity:'odd'},
+  {id:'IIC2214', name:'Teoría de la Computación', cr:10, sem:5, reqs:[{options:['IIC1253']}], parity:'odd'},
   {id:'IIC2513', name:'Tecnologías y Aplicaciones Web', cr:10, sem:5, reqs:[{options:['IIC2143']}]},
   {id:'IIC2333', name:'Sistemas Operativos y Redes', cr:10, sem:5, reqs:[{options:['IIC2343']}]},
   {id:'FG5', name:'Formación General', cr:10, sem:5, reqs:[], blank:true},
@@ -203,16 +476,106 @@ const RAW = [
   // sem7
   {id:'IIC2523', name:'Sistemas Distribuidos', cr:10, sem:7, reqs:[{options:['IIC2333']}]},
   {id:'IIC2182', name:'Interfaces y Experiencia de Usuario', cr:10, sem:7, reqs:[{options:['IIC2513']}]},
-  {id:'OPT7A', name:'Opt o Minor', cr:10, sem:7, reqs:[], blank:true},
-  {id:'OPT7B', name:'Opt o Minor', cr:10, sem:7, reqs:[], blank:true},
+  {id:'OPT7A', name:'Opt o Minor', cr:10, sem:7, reqs:[], blank:true, elective:'optminor'},
+  {id:'OPT7B', name:'Opt o Minor', cr:10, sem:7, reqs:[], blank:true, elective:'optminor'},
   {id:'FG7', name:'Formación General', cr:10, sem:7, reqs:[], blank:true},
   {id:'IIC2002', name:'Práctica de Ciencia de la Computación', cr:10, sem:7, reqs:[{options:['ETI1001']},{options:['IIC2613','IIC2531','IIC2513']}]},
   // sem8
-  {id:'IIC2164', name:'Proyecto de Innovación y Computación', cr:10, sem:8, reqs:[{options:['ETI1001']},{options:['IIC2182']},{options:['IIC2531']}]},
-  {id:'OPT8A', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true},
-  {id:'OPT8B', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true},
-  {id:'OPT8C', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true},
+  {id:'IIC2164', name:'Proyecto de Innovación y Computación', cr:10, sem:8, reqs:[{options:['ETI1001']},{options:['IIC2182']},{options:['IIC2531']}], parity:'even'},
+  {id:'OPT8A', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true, elective:'optminor'},
+  {id:'OPT8B', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true, elective:'optminor'},
+  {id:'OPT8C', name:'Opt o Minor', cr:10, sem:8, reqs:[], blank:true, elective:'optminor'},
   {id:'FG8', name:'Formación General', cr:10, sem:8, reqs:[], blank:true},
+];
+
+/* ---------- ELECTIVE DATASETS ---------- */
+const BLOCK_A = [ // OPT/Minor · máx 20 cr
+  {id:'IIC2026', name:'Visualización de Información', cr:10},
+  {id:'IIC2714', name:'Fundamentos de Procesamiento de Imágenes', cr:10},
+  {id:'IIC2113', name:'Diseño Detallado de Software', cr:10},
+  {id:'IIC2173', name:'Arquitectura de Sistemas de Software', cr:10},
+  {id:'IIC2764', name:'Conocimiento, Cultura y Tecnología', cr:10},
+  {id:'IIC2293', name:'Algoritmos Avanzados', cr:10},
+  {id:'IIC2433', name:'Minería de Datos', cr:10},
+];
+const BLOCK_B = [ // OPT/Minor · mín 30 cr, por área
+  {area:'Periodismo, comunicación y datos', courses:[
+    {id:'COM117', name:'Narración Interactiva', cr:10},
+    {id:'COM121', name:'Semiología', cr:10},
+    {id:'COM155', name:'Laboratorio de Escucha', cr:10},
+  ]},
+  {area:'Nuevas Tecnologías de Comunicación', courses:[
+    {id:'COM813', name:'Taller de Narración e Industria de E-Sports o Deportes Electrónicos', cr:10},
+    {id:'COM605', name:'Taller de Animación', cr:10},
+    {id:'COM617', name:'Lenguaje del Video Juego', cr:10},
+  ]},
+  {area:'Matemáticas y Computación', courses:[
+    {id:'IMT2117', name:'Probabilidades y Algoritmos', cr:10},
+    {id:'IMT2120', name:'Data Warehousing Transaccional y la Nube', cr:10},
+    {id:'MAT2225', name:'Teoría de Números', cr:10},
+    {id:'MAT2605', name:'Cálculo Científico I', cr:10},
+    {id:'MAT2205', name:'Álgebra Abstracta I', cr:10},
+    {id:'MAT251I', name:'Análisis Real', cr:10},
+  ]},
+  {area:'Lingüística y Computación', courses:[
+    {id:'LET0121', name:'Grandes Preguntas sobre el Lenguaje', cr:10},
+    {id:'LET0131', name:'Gramática Española I', cr:10},
+    {id:'LET0129', name:'Lingüística de Corpus y Computacional', cr:10},
+  ]},
+  {area:'Economía y Computación', courses:[
+    {id:'EAE1210', name:'Introducción a la Macroeconomía', cr:10},
+    {id:'EAE1110', name:'Introducción a la Microeconomía', cr:10},
+    {id:'EAE2510', name:'Econometría', cr:10},
+    {id:'EAE1220', name:'Análisis Económico: la Experiencia Chilena', cr:10},
+  ]},
+  {area:'Astronomía y Computación', courses:[
+    {id:'AST211', name:'Introducción al Análisis de Datos', cr:10},
+    {id:'AST221', name:'Taller de Astronomía', cr:10},
+    {id:'AST101', name:'Un Paseo por el Universo', cr:10},
+  ]},
+  {area:'Biología y Computación', courses:[
+    {id:'BIO242C', name:'Bioestadística', cr:10},
+    {id:'BIO231C', name:'Ecología', cr:10},
+    {id:'BIO298E', name:'Trabajo Experimental en Ecología', cr:5},
+  ]},
+  {area:'Ingeniería de Software', courses:[
+    {id:'IIC3103', name:'Taller de Integración', cr:10},
+    {id:'IIC3745', name:'Testing', cr:10},
+    {id:'IIC3380', name:'Taller de Aplicaciones en Plataformas Móviles', cr:10},
+    {id:'IIC3585', name:'Diseño Avanzado de Aplicaciones Web', cr:10},
+  ]},
+  {area:'Inteligencia Artificial', courses:[
+    {id:'IIC2440', name:'Procesamiento de Datos Masivos', cr:10},
+    {id:'IIC2685', name:'Robótica Móvil', cr:10},
+    {id:'IIC3670', name:'Procesamiento de Lenguaje Natural', cr:10},
+    {id:'IIC3675', name:'Aprendizaje Reforzado', cr:10},
+    {id:'IIC3694', name:'Inteligencia Artificial Generativa', cr:10},
+    {id:'IIC3697', name:'Aprendizaje Profundo', cr:10},
+  ]},
+  {area:'Diseño', courses:[
+    {id:'DNO016', name:'Diseño y Manufactura Digital Cad/Cam', cr:10},
+    {id:'DNO036', name:'Design Sketching', cr:10},
+    {id:'DNO151P', name:'Diseño por Computación I', cr:10},
+    {id:'DNO096', name:'Introducción al Desarrollo Web desde el Diseño', cr:10},
+  ]},
+];
+const CIENCIAS_LIST = [ // Optativo de Ciencias · mín 10 cr
+  {id:'FIS1514+FIS0154', name:'Dinámica + Laboratorio de Dinámica (o ICE1514+FIS0154)', cr:10},
+  {id:'FIS1523+FIS0152', name:'Termodinámica + Laboratorio de Termodinámica', cr:10},
+  {id:'FIS1533+FIS0153', name:'Electricidad y Magnetismo + Laboratorio de Electricidad y Magnetismo', cr:10},
+  {id:'AST101', name:'Un Paseo por el Universo', cr:10},
+  {id:'AST211', name:'Introducción al Análisis de Datos', cr:10},
+  {id:'AST221', name:'Taller de Astronomía', cr:10},
+  {id:'AST0112', name:'Astronomy', cr:10},
+  {id:'BIO110C', name:'Biología de Organismos y Comunidades', cr:10},
+  {id:'BIO141C', name:'Biología de la Célula', cr:10},
+  {id:'BIO242C', name:'Bioestadística', cr:10},
+  {id:'BIO231C', name:'Ecología', cr:10},
+  {id:'QIM100E', name:'Química para Ingeniería', cr:10},
+  {id:'QIM100', name:'Química General', cr:10},
+  {id:'AGL101', name:'Botánica', cr:10},
+  {id:'AGC220', name:'Flora Natura', cr:10},
+  {id:'VET0140', name:'Biología y Diversidad Animal', cr:10},
 ];
 
 const byId = {};
@@ -231,6 +594,24 @@ RAW.forEach(c=>{
 /* ---------- STATE ---------- */
 let passed = new Set();
 let pos = {}; // current semester per id
+let electiveChoice = {}; // slotId -> {id,name,cr,block}
+let currentPickerSlot = null;
+
+function blockTotal(block, excludeSlot){
+  let sum = 0;
+  Object.entries(electiveChoice).forEach(([slot,v])=>{
+    if(slot===excludeSlot) return;
+    if(v.block===block) sum += v.cr;
+  });
+  return sum;
+}
+function usedElsewhere(courseId, excludeSlot){
+  return Object.entries(electiveChoice).some(([slot,v])=> slot!==excludeSlot && v.id===courseId);
+}
+function slotAt(courseId, excludeSlot){
+  const found = Object.entries(electiveChoice).find(([slot,v])=> slot!==excludeSlot && v.id===courseId);
+  return found ? pos[found[0]] : null;
+}
 RAW.forEach(c=>pos[c.id]=c.sem);
 
 /* ---------- LOGIC ---------- */
@@ -248,9 +629,10 @@ function missingReqNames(course){
 }
 // dir: +1 pushes forward to next valid semester, -1 pulls back to previous valid semester
 function adjustForOddOnly(course, sem, dir){
-  if(course.oddOnly && sem % 2 === 0){
-    sem += dir;
-  }
+  if(!course.parity) return sem;
+  const isOdd = sem % 2 === 1;
+  const wantsOdd = course.parity === 'odd';
+  if(isOdd !== wantsOdd){ sem += dir; }
   return sem;
 }
 function canMoveToSemester(course, targetSem){
@@ -293,20 +675,25 @@ function render(justAffected){
 
   let totalCr=0, passedCr=0, passedCount=0;
 
+  function effectiveCr(c){ return (c.elective && electiveChoice[c.id]) ? electiveChoice[c.id].cr : c.cr; }
+
   for(let s=1; s<=maxSem; s++){
     const col = document.createElement('div');
     col.className = 'col' + (s>8 ? ' extra' : '');
     const courses = RAW.filter(c=>pos[c.id]===s).sort((a,b)=> (a.blank - b.blank) || a.sem-b.sem);
-    const colCr = courses.reduce((a,c)=>a+c.cr,0);
+    const colCr = courses.reduce((a,c)=>a+effectiveCr(c),0);
     col.innerHTML = `<div class="col-hdr"><span>Semestre ${s}${s>8?' <span style="font-size:9px">(extendido)</span>':''}</span><span class="n">${s>8?'':''}</span></div>
       <div class="col-hdr" style="border:none;padding-bottom:0;margin-bottom:8px;margin-top:-8px;"><span></span><span class="cr">${colCr} cr</span></div>`;
 
     courses.forEach(c=>{
-      totalCr += c.cr;
+      const chosen = c.elective ? electiveChoice[c.id] : null;
+      const cr = effectiveCr(c);
+      totalCr += cr;
       const isPassed = passed.has(c.id);
-      if(isPassed){ passedCr += c.cr; passedCount++; }
+      if(isPassed){ passedCr += cr; passedCount++; }
       const available = !isPassed && !c.blank && reqSatisfiedByPassed(c);
       const locked = !isPassed && !c.blank && !available;
+      const electiveEmpty = c.elective && !chosen;
 
       const card = document.createElement('div');
       card.className = 'card' +
@@ -314,12 +701,14 @@ function render(justAffected){
         (isPassed ? ' passed' : '') +
         (available ? ' available' : '') +
         (locked ? ' locked' : '') +
+        (electiveEmpty ? ' elective-empty' : '') +
+        (chosen ? ' elective-chosen' : '') +
         (justAffected.has(c.id) ? ' flash' : '');
       card.dataset.id = c.id;
 
       const movedBadge = (!c.blank && pos[c.id] !== c.sem)
         ? `<span class="moved-badge">movido de S${c.sem}</span>` : '';
-      const oddBadge = c.oddOnly ? `<span class="odd-badge">solo impares</span>` : '';
+      const oddBadge = c.parity ? `<span class="odd-badge">solo ${c.parity==='odd'?'impares':'pares'}</span>` : '';
 
       let reqNote = '';
       if(locked){
@@ -332,10 +721,17 @@ function render(justAffected){
       else if(available){ pill = '<span class="status-pill">disponible</span>'; }
       else { pill = '<span class="status-pill">bloqueado</span>'; }
 
+      const displayCode = chosen ? chosen.id : (c.id.startsWith('OPT')||c.id.startsWith('FG')||c.id.startsWith('FORM')||c.id.startsWith('VRA') ? '' : c.id);
+      const displayName = chosen ? chosen.name : c.name;
+      const electiveAction = c.elective
+        ? `<div class="elective-action" data-act="elective" data-id="${c.id}">${chosen ? '✎ cambiar elección' : '＋ elegir ramo'}</div>`
+        : '';
+
       card.innerHTML = `
-        <div class="card-top"><span>${c.id.startsWith('OPT')||c.id.startsWith('FG')||c.id.startsWith('FORM')||c.id.startsWith('VRA') ? '' : c.id}</span><span>${c.cr>0? c.cr+' cr':''}</span></div>
+        <div class="card-top"><span>${displayCode}</span><span>${cr>0? cr+' cr':''}</span></div>
         ${movedBadge}${oddBadge}
-        <div class="name">${c.name}</div>
+        <div class="name">${displayName}</div>
+        ${electiveAction}
         ${reqNote}
         <div class="foot">
           <button class="mv" data-act="left" data-id="${c.id}">‹</button>
@@ -355,6 +751,11 @@ function render(justAffected){
 
 /* ---------- EVENTS ---------- */
 board.addEventListener('click', (e)=>{
+  const elAct = e.target.closest('[data-act="elective"]');
+  if(elAct){
+    openPicker(elAct.dataset.id);
+    return;
+  }
   const mvBtn = e.target.closest('.mv');
   if(mvBtn){
     const id = mvBtn.dataset.id;
@@ -366,19 +767,19 @@ board.addEventListener('click', (e)=>{
       render(affected);
       if(affected.size>1){
         toast(`Atrasaste ${c.name}. Esto también empujó ${affected.size-1} ramo(s) que dependen de él.`);
-      } else if(c.oddOnly){
-        toast(`${c.name} solo se dicta en semestres impares, se ubicó en el Semestre ${pos[id]}.`);
+      } else if(c.parity){
+        toast(`${c.name} solo se dicta en semestres ${c.parity==='odd'?'impares':'pares'}, se ubicó en el Semestre ${pos[id]}.`);
       }
     } else {
       if(canMoveLeft(id)){
         pos[id] = adjustForOddOnly(c, pos[id]-1, -1);
         render(new Set([id]));
-        if(c.oddOnly){ toast(`${c.name} solo se dicta en semestres impares, se ubicó en el Semestre ${pos[id]}.`); }
+        if(c.parity){ toast(`${c.name} solo se dicta en semestres ${c.parity==='odd'?'impares':'pares'}, se ubicó en el Semestre ${pos[id]}.`); }
       } else {
         const card = e.target.closest('.card');
         card.classList.add('flash');
-        toast(c.oddOnly
-          ? `No puedes adelantar "${c.name}" más — solo se dicta en semestres impares y/o ya llegó a su prerrequisito mínimo.`
+        toast(c.parity
+          ? `No puedes adelantar "${c.name}" más — solo se dicta en semestres ${c.parity==='odd'?'impares':'pares'} y/o ya llegó a su prerrequisito mínimo.`
           : `No puedes adelantar "${c.name}" más allá de sus prerrequisitos.`);
         setTimeout(()=>card.classList.remove('flash'),500);
       }
@@ -389,6 +790,10 @@ board.addEventListener('click', (e)=>{
   if(!card) return;
   const id = card.dataset.id;
   const c = byId[id];
+  if(c.elective && !electiveChoice[id]){
+    openPicker(id);
+    return;
+  }
   if(c.blank){
     // blank slots (electives/formación) can always be toggled as "completed" for tracking
     passed.has(id) ? passed.delete(id) : passed.add(id);
@@ -411,8 +816,139 @@ board.addEventListener('click', (e)=>{
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   passed = new Set();
   RAW.forEach(c=>pos[c.id]=c.sem);
+  electiveChoice = {};
   render();
   toast('Plan reiniciado.');
+});
+
+/* ---------- PICKER MODAL ---------- */
+const overlay = document.getElementById('pickerOverlay');
+const pickerHdr = document.getElementById('pickerHdr');
+const pickerBody = document.getElementById('pickerBody');
+const pickerSearch = document.getElementById('pickerSearch');
+
+function closePicker(){
+  overlay.classList.remove('show');
+  currentPickerSlot = null;
+}
+
+function openPicker(slotId){
+  currentPickerSlot = slotId;
+  pickerSearch.value = '';
+  drawPickerHeader(slotId);
+  drawPickerList(slotId, '');
+  overlay.classList.add('show');
+  pickerSearch.focus();
+}
+
+function drawPickerHeader(slotId){
+  const c = byId[slotId];
+  const current = electiveChoice[slotId];
+  if(c.elective === 'optminor'){
+    const aTotal = blockTotal('A', slotId) + (current && current.block==='A' ? current.cr : 0);
+    const bTotal = blockTotal('B', slotId) + (current && current.block==='B' ? current.cr : 0);
+    pickerHdr.innerHTML = `
+      <h3>Elegir OPT o Minor — Semestre ${pos[slotId]}</h3>
+      <p>Este cupo cuenta para los 50 cr de OPT/Minor de la malla. Bloque A: máx. 20 cr · Bloque B: mín. 30 cr.</p>
+      <div class="picker-totals">
+        <span class="${aTotal>20?'warn':'ok'}">Bloque A: ${aTotal}/20 cr</span>
+        <span class="${bTotal>=30?'ok':'warn'}">Bloque B: ${bTotal}/30 cr (mín)</span>
+      </div>`;
+  } else {
+    const cTotal = (current ? current.cr : 0);
+    pickerHdr.innerHTML = `
+      <h3>Elegir Optativo de Ciencias — Semestre ${pos[slotId]}</h3>
+      <p>Se exige un mínimo de 10 cr de Optativo de Ciencias. Este cupo cubre esa exigencia.</p>
+      <div class="picker-totals"><span class="${cTotal>=10?'ok':'warn'}">Seleccionado: ${cTotal}/10 cr (mín)</span></div>`;
+  }
+}
+
+function drawPickerList(slotId, filterText){
+  const c = byId[slotId];
+  const current = electiveChoice[slotId];
+  const q = filterText.trim().toLowerCase();
+  const matches = (item) => !q || item.id.toLowerCase().includes(q) || item.name.toLowerCase().includes(q);
+
+  function itemRow(item, block){
+    const isCurrent = current && current.id === item.id;
+    const takenSem = usedElsewhere(item.id, slotId) ? slotAt(item.id, slotId) : null;
+    let disabled = false, flag = '';
+    if(takenSem){ disabled = true; flag = `ya elegido · S${takenSem}`; }
+    else if(block==='A' && !isCurrent){
+      const aTotal = blockTotal('A', slotId);
+      if(aTotal + item.cr > 20){ disabled = true; flag = 'supera máx. Bloque A'; }
+    }
+    return `<div class="picker-item ${isCurrent?'selected':''} ${disabled?'disabled':''}"
+        data-course="${item.id}" data-block="${block}" data-cr="${item.cr}" data-name="${item.name.replace(/"/g,'&quot;')}">
+      <div class="pi-left"><span class="pi-code">${item.id}</span><span class="pi-name">${item.name}</span></div>
+      <div class="pi-right">${flag?`<span class="pi-flag">${flag}</span>`:''}<span class="pi-cr">${item.cr} cr</span>${isCurrent?'<span class="pi-flag" style="color:var(--green)">✓ actual</span>':''}</div>
+    </div>`;
+  }
+
+  let html = '';
+  if(current){
+    html += `<div class="picker-clear"><button data-act="clear">quitar selección de este cupo</button></div>`;
+  }
+
+  if(c.elective === 'optminor'){
+    const aItems = BLOCK_A.filter(matches);
+    if(aItems.length){
+      html += `<div class="picker-group-label">Bloque A · máx 20 cr</div>` + aItems.map(i=>itemRow(i,'A')).join('');
+    }
+    BLOCK_B.forEach(area=>{
+      const items = area.courses.filter(matches);
+      if(items.length){
+        html += `<div class="picker-group-label">${area.area}</div>` + items.map(i=>itemRow(i,'B')).join('');
+      }
+    });
+    if(!aItems.length && !BLOCK_B.some(a=>a.courses.some(matches))){
+      html += `<div class="picker-empty-msg">Sin resultados para "${filterText}".</div>`;
+    }
+  } else {
+    const items = CIENCIAS_LIST.filter(matches);
+    if(items.length){
+      html += items.map(i=>itemRow(i,'C')).join('');
+    } else {
+      html += `<div class="picker-empty-msg">Sin resultados para "${filterText}".</div>`;
+    }
+  }
+  pickerBody.innerHTML = html;
+}
+
+pickerSearch.addEventListener('input', ()=>{
+  if(currentPickerSlot) drawPickerList(currentPickerSlot, pickerSearch.value);
+});
+
+document.getElementById('pickerClose').addEventListener('click', closePicker);
+overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closePicker(); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.classList.contains('show')) closePicker(); });
+
+pickerBody.addEventListener('click', (e)=>{
+  const clearBtn = e.target.closest('[data-act="clear"]');
+  if(clearBtn){
+    delete electiveChoice[currentPickerSlot];
+    passed.delete(currentPickerSlot);
+    closePicker();
+    render();
+    return;
+  }
+  const item = e.target.closest('.picker-item');
+  if(!item || item.classList.contains('disabled')) return;
+  const slotId = currentPickerSlot;
+  const courseId = item.dataset.course;
+  const block = item.dataset.block;
+  const cr = parseInt(item.dataset.cr, 10);
+  const name = item.dataset.name;
+
+  if(item.classList.contains('selected')){
+    delete electiveChoice[slotId];
+  } else {
+    electiveChoice[slotId] = {id:courseId, name, cr, block};
+    passed.delete(slotId); // reset progress marker when the chosen course changes
+  }
+  closePicker();
+  render();
+  toast(electiveChoice[slotId] ? `${courseId} asignado a este cupo.` : 'Selección eliminada.');
 });
 
 render();
