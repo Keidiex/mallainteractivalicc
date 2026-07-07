@@ -5,4 +5,4 @@ Apreta [AQUÍ](https://keidiex.github.io/mallainteractivalicc/) para abrirlo, o 
 https://keidiex.github.io/mallainteractivalicc/
 
 IMPORTANTE!
-Recuerda que la malla puede estar sujeta a cambios o pueden no estar tan exactas las cadenas, si encuentras algun fallo avisar para modificar :p
+Recuerda que la malla puede estar sujeta a cambios o pueden no estar tan exactas las cadenas, si encuentras algun fallo avisar para modificar :p 
