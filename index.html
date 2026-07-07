@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es">   
 <head>
 <meta charset="UTF-8">
 <title>Malla LICC — Planificador</title>
@@ -37,6 +37,7 @@
   .app{max-width:1500px;margin:0 auto;padding:28px 22px 60px;}
 
   /* header */
+  /* ---- Hecho por Joaquin N. Repgen26 y Cloude jejeje ---- */
   .hdr{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end;
     border-bottom:2px dashed var(--muted-line);padding-bottom:18px;margin-bottom:18px;}
   .hdr h1{font-family:'Space Grotesk',sans-serif;font-size:30px;letter-spacing:0.3px;margin:0 0 4px;
@@ -170,6 +171,16 @@
   .picker-item .pi-flag{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--red);white-space:nowrap;}
   .picker-empty-msg{padding:20px;text-align:center;color:#a9c1d9;font-size:12.5px;}
 
+  /* ---- screenshot download button ---- */
+  .shot-btn{position:fixed;bottom:22px;right:22px;z-index:60;display:flex;align-items:center;gap:8px;
+    background:var(--orange);color:var(--blue-deep);border:none;padding:11px 16px;border-radius:24px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.2px;
+    cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.35);transition:transform .12s ease, box-shadow .12s ease;}
+  .shot-btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,0.4);}
+  .shot-btn:disabled{opacity:0.65;cursor:default;transform:none;}
+  .shot-btn .shot-icon{font-size:16px;line-height:1;}
+  @media (max-width:640px){ .shot-btn .shot-label{display:none;} .shot-btn{padding:12px;border-radius:50%;} }
+
   ::-webkit-scrollbar{height:9px;}
   ::-webkit-scrollbar-track{background:var(--blue-panel);}
   ::-webkit-scrollbar-thumb{background:var(--muted-line);border-radius:5px;}
@@ -255,7 +266,7 @@
       <h2><span class="idx">i</span>Cómo usar esta herramienta</h2>
       <ul class="note-list">
         <li>Esta es una <b>herramienta de planificación personal</b>, no reemplaza la validación oficial de la escuela (SIDING u otro sistema). Antes de inscribir, confirma siempre con el sistema oficial.</li>
-        <li>Los prerrequisitos y correquisitos están basados en la malla vigente de la cadena de ramos. Si la escuela actualiza la malla, no dudes en avisar para ponerla al dia :p.</li>
+        <li>Los prerrequisitos y correquisitos están basados en la malla vigente de la cadena de ramos. Si la escuela actualiza la malla, hazmelo saber para ponerla al dia!.</li>
         <li>Que un ramo aparezca "disponible" según los prerrequisitos <b>no garantiza que se dicte ese semestre</b> — varios ramos tienen oferta limitada (un semestre al año, cupos, profesor a cargo, etc).</li>
         <li>Los ramos con etiqueta <b>"solo impares"</b> o <b>"solo pares"</b> reflejan periodicidad real de dictado (ej: Teoría de la Computación y Fundamentos de Lenguajes de Programación solo en semestres impares; el Proyecto de Innovación y Computación solo en pares).</li>
         <li>Marcar un ramo como <b>aprobado</b> es solo para que la herramienta calcule qué se desbloquea — no queda guardado entre sesiones ni se sincroniza con nada oficial.</li>
@@ -422,6 +433,10 @@
 
 <div class="toast" id="toast"></div>
 
+<button class="shot-btn" id="shotBtn" title="Descargar imagen de la malla">
+  <span class="shot-icon">📷</span><span class="shot-label">descargar malla</span>
+</button>
+
 <div class="picker-overlay" id="pickerOverlay">
   <div class="picker-modal">
     <button class="picker-close" id="pickerClose">×</button>
@@ -431,6 +446,7 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 /* ---------- DATA ---------- */
 // req group: {options:[ids...], coreq:bool}  -> satisfied if ANY option in options meets condition
@@ -949,6 +965,69 @@ pickerBody.addEventListener('click', (e)=>{
   closePicker();
   render();
   toast(electiveChoice[slotId] ? `${courseId} asignado a este cupo.` : 'Selección eliminada.');
+});
+
+/* ---------- SCREENSHOT / DOWNLOAD ---------- */
+const shotBtn = document.getElementById('shotBtn');
+
+function buildCaptureFrame(){
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `position:absolute;left:-99999px;top:0;background:#0d2440;padding:30px;
+    border-radius:14px;width:max-content;font-family:'IBM Plex Sans',sans-serif;color:#eaf1f8;`;
+
+  const title = document.createElement('div');
+  title.style.cssText = `margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;border-bottom:2px dashed #4a6689;padding-bottom:14px;`;
+  title.innerHTML = `
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;white-space:nowrap;">Malla LICC</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#a9c1d9;white-space:nowrap;text-align:right;">
+      ${document.getElementById('creditsLabel').textContent} · ${document.getElementById('semLabel').textContent}
+    </div>`;
+  wrap.appendChild(title);
+
+  // clone the board's current rendered state so the live board is never touched/moved
+  const boardClone = board.cloneNode(true);
+  boardClone.removeAttribute('id');
+  boardClone.style.width = 'max-content';
+  boardClone.style.maxWidth = 'none';
+  boardClone.style.overflow = 'visible';
+  wrap.appendChild(boardClone);
+
+  return wrap;
+}
+
+shotBtn.addEventListener('click', ()=>{
+  if(typeof html2canvas === 'undefined'){
+    toast('No se pudo cargar el generador de imágenes (revisa tu conexión).');
+    return;
+  }
+  const label = shotBtn.querySelector('.shot-label');
+  const originalLabel = label.textContent;
+  shotBtn.disabled = true;
+  label.textContent = 'generando…';
+
+  const frame = buildCaptureFrame();
+  document.body.appendChild(frame);
+
+  html2canvas(frame, {
+    backgroundColor: '#0d2440',
+    scale: 2,
+    useCORS: true
+  }).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'malla_licc.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    toast('Malla descargada como imagen (incluye todos los semestres).');
+  }).catch(()=>{
+    toast('Ocurrió un error generando la captura.');
+  }).finally(()=>{
+    frame.remove();
+    shotBtn.disabled = false;
+    label.textContent = originalLabel;
+  });
 });
 
 render();
